@@ -28,6 +28,7 @@ package { [
   'ca-certificates',
   'cron',
   'debianutils',
+  'default-mysql-client',
   'dnsutils',
   'dovecot-core',
   'dovecot-imapd',
@@ -128,7 +129,7 @@ exec { 'preseeding':
 package { 'alternc':
   ensure   => installed,
   provider => 'dpkg',
-  source   => '/vagrant/alternc_3.3.10_all.deb',
+  source   => '/vagrant/alternc_3.5.0~rc1_all.deb',
   require  => Exec['preseeding'],
   notify   => Exec['alternc.install'],
 }
