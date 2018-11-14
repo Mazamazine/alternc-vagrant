@@ -21,6 +21,8 @@ Vagrant.configure(2) do |config|
     #puppet.options = "--verbose --debug"
   end
 
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+
   if Vagrant.has_plugin?("vagrant-cachier")
     # Configure cached packages to be shared between instances of the same base box.
     # More info on the "Usage" link above
