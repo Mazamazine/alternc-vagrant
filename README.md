@@ -35,7 +35,7 @@ https://wiki.debian.org/sbuild ). For examples, I will use sbuild:
 Before starting the VM, you need to compile the debian packages for alternc.
 This also needs to happen after every change you make to the source code:
 
-    cd alternc; sbuild -d stretch
+    cd alternc; sbuild -d stretch --no-run-lintian
 
 This should produce some files in the vagrant project directory (so outside of
 the alternc source directory) including some .deb packages.
