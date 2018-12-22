@@ -23,6 +23,10 @@ EOF
 sudo apt-get update >/dev/null 2>/dev/null
 "
     end
+  else
+    config.vm.provision :shell do |s|
+      s.inline = "sudo rm -f /etc/apt/apt.conf.d/proxy"
+    end
   end
 
   config.vm.provision :puppet do |puppet|
