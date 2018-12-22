@@ -30,6 +30,7 @@ sudo apt-get update >/dev/null 2>/dev/null
     puppet.manifest_file  = "default.pp"
     #puppet.options = "--verbose --debug"
   end
+  config.vm.synced_folder ".", "/home/vagrant/alternc", type: "nfs"
 
   if Vagrant.has_plugin?("vagrant-cachier")
     # Configure cached packages to be shared between instances of the same base box.
