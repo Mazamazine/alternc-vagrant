@@ -32,6 +32,8 @@ sudo apt-get update >/dev/null 2>/dev/null
   end
   config.vm.synced_folder ".", "/home/vagrant/alternc", type: "nfs"
 
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+
   if Vagrant.has_plugin?("vagrant-cachier")
     # Configure cached packages to be shared between instances of the same base box.
     # More info on the "Usage" link above
