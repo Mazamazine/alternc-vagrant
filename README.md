@@ -14,7 +14,7 @@ This project depends on vagrant and vagrant-libvirt. Optionally you can also
 install vagrant-cachier to keep installed debian packages in cache to speed
 things up and avoid downloading the same data over and over again:
 
-    sudo apt install vagrant vagrant-libvirt vagrant-cachier
+    sudo apt install vagrant vagrant-libvirt vagrant-cachier vagrant-librarian-puppet
 
 Then you should clone the alternc code inside the project (it will be
 ignored by git):
