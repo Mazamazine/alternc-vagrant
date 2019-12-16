@@ -19,6 +19,12 @@ Vagrant.configure(2) do |config|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "default.pp"
     #puppet.options = "--verbose --debug"
+    if Vagrant.has_plugin?("vagrant-librarian-puppet")
+      config.librarian_puppet.puppetfile_dir = "puppet"
+      puppet.module_path = "puppet/modules"
+      # Makes changing the puppet code easier
+      puppet.synced_folder_type = "nfs"
+    end
   end
 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"

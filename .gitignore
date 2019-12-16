@@ -7,3 +7,7 @@
 /alternc*.build
 /alternc*.buildinfo
 /alternc*.changes
+/alternc-*
+puppet/.librarian
+puppet/modules
+puppet/.tmp

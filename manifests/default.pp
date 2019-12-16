@@ -39,7 +39,6 @@ package { [
   'gettext',
   'incron',
   'libapache2-mpm-itk',
-  'libapache2-mod-php7.0',
   'libjs-jquery-tablesorter',
   'libjs-jquery-ui',
   'libjs-jquery-ui-theme-redmond',
@@ -52,9 +51,9 @@ package { [
   'opendkim',
   'opendkim-tools',
   'perl',
-  'php7.0-cli',
-  'php7.0-curl',
-  'php7.0-mysql',
+  'php-cli',
+  'php-curl',
+  'php-mysql',
   'phpmyadmin',
   'postfix',
   'postfix-mysql',
@@ -72,6 +71,52 @@ package { [
 ]:
   ensure => installed,
   before => Exec['preseeding'],
+}
+
+
+# Facter in Debian Buster uses this
+if $facts['os'] {
+  if versioncmp($facts['os']['release']['major'], '10') >= 0 {
+    $has_phpmyadmin = false
+    $php = '7.3'
+  } else {
+    $has_phpmyadmin = true
+    $php = '7.0'
+  }
+} elsif $facts['lsbdistrelease'] {
+  if versioncmp($facts['lsbdistrelease'], '10') >= 0 {
+    $has_phpmyadmin = false
+    $php = '7.3'
+  } else {
+    $has_phpmyadmin = true
+    $php = '7.0'
+  }
+}
+else {
+  # Assume it's available
+  $has_phpmyadmin = true
+  $php = '7.0'
+}
+
+package { "libapache2-mod-php${php}":
+  ensure => 'present',
+}
+
+if ! $has_phpmyadmin {
+  # Download phpyadmin to install manually
+  apt::pin { 'sid_default':
+    priority => 400,
+    release  => 'unstable',
+  }
+  apt::source { 'sid':
+    location => 'http://deb.debian.org/debian',
+    release  => 'unstable',
+    repos    => 'main',
+  }
+  Apt::Pin['sid_default']
+  -> Apt::Source['sid']
+  -> Class['apt::update']
+  -> Package['phpmyadmin']
 }
 
 # If something errors out in the process, to make the preseeding happen
@@ -131,7 +176,7 @@ package { 'alternc':
   provider => 'dpkg',
   source   => '/vagrant/alternc_3.5.0~rc1_all.deb',
   require  => Exec['preseeding'],
-  notify   => Exec['alternc.install'],
+  #notify   => Exec['alternc.install'],
 }
 
 # Finish installation: the package doesn't finish its job
