@@ -15,6 +15,20 @@ Vagrant.configure(2) do |config|
     libvirt.connect_via_ssh = false
   end
 
+  if ENV['VAGRANT_APT_PROXY']
+    config.vm.provision :shell do |s|
+      s.inline = "sudo mkdir -p /etc/apt/apt.conf.d/; sudo cat > /etc/apt/apt.conf.d/proxy <<EOF
+Acquire::http::proxy \"http://#{ENV['VAGRANT_APT_PROXY']}/\";
+EOF
+sudo apt-get update >/dev/null 2>/dev/null
+"
+    end
+  else
+    config.vm.provision :shell do |s|
+      s.inline = "sudo rm -f /etc/apt/apt.conf.d/proxy"
+    end
+  end
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "default.pp"
@@ -26,6 +40,7 @@ Vagrant.configure(2) do |config|
       puppet.synced_folder_type = "nfs"
     end
   end
+  config.vm.synced_folder ".", "/home/vagrant/alternc", type: "nfs"
 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
 

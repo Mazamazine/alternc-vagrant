@@ -35,7 +35,7 @@ https://wiki.debian.org/sbuild ). For examples, I will use sbuild:
 Before starting the VM, you need to compile the debian packages for alternc.
 This also needs to happen after every change you make to the source code:
 
-    cd alternc; sbuild -d stretch
+    cd alternc; sbuild -d stretch --no-run-lintian
 
 This should produce some files in the vagrant project directory (so outside of
 the alternc source directory) including some .deb packages.
@@ -57,5 +57,20 @@ added in the Vagrantfile.
 
 Note: You will be prompted for sudo access when starting to destroying unless
 the sudoers configuration listed in the vagrant-hostmanager readme is done.
+
+## Using an apt proxy
+
+If the environment variable VAGRANT_APT_PROXY is set, it will be used to
+configure an HTTP apt proxy in the client VM before the rest of the
+provisioning is done.
+
+Placing something like the following into `~/.bashrc` and re-sourcing it
+
+    export VAGRANT_APT_PROXY="192.168.121.1:3142"
+
+will cause the next provisioning run to add the proxy configuration.
+
+Note: 192.168.121.1 is the default vagrant-libvirt network configuration, it
+may differ depending on the provider used.
 
 [1]: https://github.com/devopsgroup-io/vagrant-hostmanager/releases
