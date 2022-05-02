@@ -73,9 +73,12 @@ package { [
 }
 
 
-# Facter in Debian Buster uses this
+# Facter as from Debian Buster uses this
 if $facts['os'] {
-  if versioncmp($facts['os']['release']['major'], '10') >= 0 {
+  if versioncmp($facts['os']['release']['major'], '11') >= 0 {
+    $has_phpmyadmin = false
+    $php = '7.4'
+  } elsif versioncmp($facts['os']['release']['major'], '10') >= 0 {
     $has_phpmyadmin = false
     $php = '7.3'
   } else {
@@ -83,7 +86,10 @@ if $facts['os'] {
     $php = '7.0'
   }
 } elsif $facts['lsbdistrelease'] {
-  if versioncmp($facts['lsbdistrelease'], '10') >= 0 {
+  if versioncmp($facts['lsbdistrelease'], '11') >= 0 {
+    $has_phpmyadmin = false
+    $php = '7.4'
+  } elsif versioncmp($facts['lsbdistrelease'], '10') >= 0 {
     $has_phpmyadmin = false
     $php = '7.3'
   } else {
