@@ -176,7 +176,7 @@ package { 'alternc':
   provider => 'dpkg',
   source   => '/vagrant/alternc_3.5.0~rc1_all.deb',
   require  => Exec['preseeding'],
-  #notify   => Exec['alternc.install'],
+  notify   => Exec['alternc.install'],
 }
 
 # Finish installation: the package doesn't finish its job

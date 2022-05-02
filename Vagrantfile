@@ -29,22 +29,6 @@ sudo apt-get update >/dev/null 2>/dev/null
     end
   end
 
-  # Install puppet and requirements
-  config.vm.provision :shell do |s|
-    s.inline = "sudo apt-get -y install puppet tzdata util-linux lsb-release augeas-tools pciutils"
-  end
-
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "default.pp"
-    #puppet.options = "--verbose --debug"
-    if Vagrant.has_plugin?("vagrant-librarian-puppet")
-      config.librarian_puppet.puppetfile_dir = "puppet"
-      puppet.module_path = "puppet/modules"
-      # Makes changing the puppet code easier
-      puppet.synced_folder_type = "nfs"
-    end
-  end
   config.vm.synced_folder ".", "/home/vagrant/alternc", type: "nfs"
 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
@@ -74,5 +58,31 @@ sudo apt-get update >/dev/null 2>/dev/null
     config.hostmanager.ignore_private_ip = false
     config.hostmanager.include_offline = true
     config.hostmanager.aliases = %w(alternc.local test.alternc.local)
+  else
+    # Make sure we have a correct hostname for alternc
+    # Must be checked before puppet runs alternc.install
+    # The default user creation could fail without notice otherwise
+    # see https://github.com/AlternC/AlternC/issues/510
+    config.vm.provision :shell do |s|
+      s.inline = "hostname=`hostname -f`; if [[ ${hostname//[^.]} == \"\" ]]; then hostnamectl set-hostname \"$hostname.local\"; echo \"Hostname set to $hostname.local\"; fi"
+    end
   end
+
+  # Install puppet and requirements
+  config.vm.provision :shell do |s|
+    s.inline = "sudo apt-get -y install puppet tzdata util-linux lsb-release augeas-tools pciutils"
+  end
+
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "default.pp"
+    #puppet.options = "--verbose --debug"
+    if Vagrant.has_plugin?("vagrant-librarian-puppet")
+      config.librarian_puppet.puppetfile_dir = "puppet"
+      puppet.module_path = "puppet/modules"
+      # Makes changing the puppet code easier
+      puppet.synced_folder_type = "nfs"
+    end
+  end
+
 end
