@@ -29,6 +29,11 @@ sudo apt-get update >/dev/null 2>/dev/null
     end
   end
 
+  # Install puppet and requirements
+  config.vm.provision :shell do |s|
+    s.inline = "sudo apt-get -y install puppet tzdata util-linux lsb-release augeas-tools pciutils"
+  end
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "default.pp"
