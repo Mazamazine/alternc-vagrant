@@ -37,7 +37,6 @@ package { [
   'dovecot-pop3d',
   'dovecot-sieve',
   'gettext',
-  'incron',
   'libapache2-mpm-itk',
   'libjs-jquery-tablesorter',
   'libjs-jquery-ui',
